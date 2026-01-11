@@ -1,5 +1,5 @@
 import { REST, Routes, RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord.js';
-import { clientId, guildId, token } from '../json/config.json';
+import { clientId, guildId, token } from './json/config.json';
 import fs from 'node:fs';
 import path from 'node:path';
 

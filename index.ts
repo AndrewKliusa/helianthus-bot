@@ -1,5 +1,5 @@
 import { Client, Collection, Events, GatewayIntentBits } from 'discord.js';
-import { token } from '../json/config.json';
+import { token } from './json/config.json';
 import path from 'path';
 import { readdirSync } from 'fs';
 
