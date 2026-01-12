@@ -1,11 +1,14 @@
-import { Colors, EmbedBuilder } from "discord.js";
+import { Colors, EmbedBuilder, GuildMember } from "discord.js";
+import { HouseType } from "../types/HouseType";
+import { UserType } from "../types/UserType";
 
 export function errorEmbed(err: string) {
-    return new EmbedBuilder()
+    return { embeds: [new EmbedBuilder()
         .setColor(Colors.Red)
         .setTitle("Error")
         .setDescription(err)
-        .setTimestamp()
+        .setTimestamp()]
+    }
 }
 
 export function uptimeEmbed(uptime: number) {
@@ -17,4 +20,23 @@ export function uptimeEmbed(uptime: number) {
     return new EmbedBuilder()
         .setColor(Colors.Orange)
         .setTitle(`Uptime: ${uptimeString}`)
+}
+
+export function infoEmbed(userData: UserType, member: GuildMember, userHouse: HouseType) {
+    const HouseColors: Record<HouseType, number> = {
+        [HouseType.Adamant]: Colors.Blue,
+        [HouseType.Theurgy]: Colors.Purple,
+        [HouseType.Demeter]: Colors.Green,
+        [HouseType.None]: Colors.White
+    } as const;
+
+    return new EmbedBuilder() 
+        .setTitle(member.displayName)
+        .setDescription(
+            `**Coins: ${userData.coins}**\n`+
+            `**Level: ${userData.level}**\n`+
+            `**Exp: ${userData.exp}**\n`+
+            `**House: ${userHouse}**`
+        )
+        .setColor(HouseColors[userHouse])
 }
