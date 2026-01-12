@@ -1,4 +1,5 @@
-import { Events, Interaction, InteractionType, MessageFlags } from "discord.js";
+import { Events, Interaction, InteractionType } from "discord.js";
+import { errorEmbed } from "../components/EmbedComponenets";
 
 export = {
     name: Events.InteractionCreate,
@@ -21,15 +22,9 @@ export = {
         } catch (error) {
             console.error(error);
             if (interaction.replied || interaction.deferred) {
-                await interaction.followUp({
-                    content: 'There was an error while executing this command!',
-                    flags: MessageFlags.Ephemeral,
-                });
+                await interaction.followUp(errorEmbed("There was an error while executing your command!"));
             } else {
-                await interaction.reply({
-                    content: 'There was an error while executing this command!',
-                    flags: MessageFlags.Ephemeral,
-                });
+                await interaction.reply(errorEmbed("There was an error while executing your command!"));
             }
         }
     }

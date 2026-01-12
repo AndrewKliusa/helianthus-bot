@@ -4,10 +4,14 @@ import path from 'path';
 import { readdirSync } from 'fs';
 import { connectDatabase } from './mongoose';
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildVoiceStates] });
 
 client.commands = new Collection(); 
 client.interactions = new Collection(); 
+client.cooldowns = {
+	coinsForMessages: new Collection<string, number>,
+	coinsForVoice: new Collection<string, number>
+}
 
 client.once(Events.ClientReady, (readyClient: { user: { tag: string; }; }) => {
 	console.log(`Ready! Logged in as ${readyClient.user.tag}`);
