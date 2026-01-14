@@ -28,5 +28,9 @@ export default class Database {
             Object.assign(userData, fields);
             userData.save();
         }
+
+        public static async getAll() {
+            return await UserModel.find();
+        }
     }
 }

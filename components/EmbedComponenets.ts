@@ -47,3 +47,29 @@ export function infoEmbed(userData: UserType, member: GuildMember, userHouse: Ho
         .setColor(houseColors[userHouse])
         .setThumbnail(member.user.avatarURL())
 }
+
+export function leaderboardEmbed(usersData: UserType[]) {
+    enum Icons {
+        Gold = "<:gold:1460594644688572416>",
+        Silver = "<:silver:1460594666981294091>",
+        Bronze = "<:bronze:1460594690381320295>"
+    }
+
+    usersData.sort((userOne, userTwo) => {
+        return userTwo.coins - userOne.coins;
+    })
+
+    const descriptionText = usersData.map((userData: UserType) => {
+        const userPlacement = usersData.indexOf(userData) + 1;
+        const userPlacementText = 
+            userPlacement == 1 ? Icons.Gold : 
+            userPlacement == 2 ? Icons.Silver : 
+            userPlacement == 3 ? Icons.Bronze : `${userPlacement})`
+
+        return `${userPlacementText} <@${userData.id}>: ${userData.coins}`
+    }).join("\n");
+
+    return new EmbedBuilder()
+        .setTitle("Leaderboard")
+        .setDescription(descriptionText)
+}
