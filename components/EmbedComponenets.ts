@@ -11,6 +11,14 @@ export function errorEmbed(err: string) {
     } as InteractionReplyOptions
 }
 
+export function successEmbed(message: string) {
+    return { embeds: [new EmbedBuilder()
+        .setColor(Colors.Green)
+        .setTitle("Success!")
+        .setDescription(bold(message))], flags: MessageFlags.Ephemeral
+    } as InteractionReplyOptions
+}
+
 export function uptimeEmbed(uptime: number) {
     const uptimeSeconds = Math.round(uptime / 1000);
     const uptimeMinutes = Math.round(uptime / (1000 * 60));
@@ -66,7 +74,7 @@ export function leaderboardEmbed(usersData: UserType[]) {
             userPlacement == 2 ? Icons.Silver : 
             userPlacement == 3 ? Icons.Bronze : `${userPlacement})`
 
-        return `${userPlacementText} <@${userData.id}>: ${userData.coins}`
+        return `${userPlacementText} <@${userData.id}>: ${userData.coins} <:dollar:1460305222218809447>`
     }).join("\n");
 
     return new EmbedBuilder()
