@@ -1,4 +1,4 @@
-import { AttachmentBuilder, bold, Colors, EmbedBuilder, GuildMember, InteractionReplyOptions, MessageCreateOptions, MessageFlags } from "discord.js";
+import { bold, Colors, EmbedBuilder, GuildMember, InteractionReplyOptions, MessageCreateOptions, MessageFlags } from "discord.js";
 import { adamantRoleId, demeterRoleId, theurgyRoleId } from "../json/config.json";
 import { HouseType } from "../types/HouseType";
 import { UserType } from "../types/UserType";
@@ -84,10 +84,6 @@ export function leaderboardEmbed(usersData: UserType[]) {
 }
 
 export function linkEmbed(): MessageCreateOptions {
-    const accountLink = new AttachmentBuilder('./assets/account_link.png');
-    const solstice = new AttachmentBuilder('./assets/solstice.png');
-
-
     const embed = new EmbedBuilder()
         .setTitle("<:link1:1463145604359262405> Link your minecraft account")
         .addFields([
@@ -101,8 +97,34 @@ export function linkEmbed(): MessageCreateOptions {
             },
         ])
         .setColor(Colors.Orange)
-        .setImage("attachment://account_link.png")
-        .setThumbnail("attachment://solstice.png")
+        .setImage("https://media.discordapp.net/attachments/1451299094067941499/1463513728946274326/Helianthus-AccountLink.png?ex=69721adf&is=6970c95f&hm=190e9a03868862be38dfbd058e13fecca774c586f604ed1e1fac306dcac5b821&=&format=webp&quality=lossless&width=1800&height=400")
+        .setThumbnail("https://media.discordapp.net/attachments/1463472744111935617/1463473749713227849/solstice.png?ex=6971f5a3&is=6970a423&hm=77571d76aaa153a106d4bdb3020dc475374e4ed77bf283d19b62bd12fc004f53&=&format=webp&quality=lossless&width=800&height=800")
 
-    return { embeds: [embed], files: [accountLink, solstice], components: [linkSelectMenu()] };
+    return { embeds: [embed], components: [linkSelectMenu()] };
+}
+
+export function linkedAccountEmbed(minecraftUsername: string) {
+    return new EmbedBuilder()
+        .setTitle("Minecraft account info")
+        .setDescription(`**Linked cccount name: \`${minecraftUsername}\`**`)
+        .setColor(Colors.Orange)
+}
+
+export function codeSentEmbed(minecraftUsername: string) {
+    return new EmbedBuilder()
+        .setTitle("The code has been successfully sent!")
+        .setDescription(`**Account name: \`${minecraftUsername}\`\n`+ 
+            "Use options below to proceed.**")
+        .setColor(Colors.Orange)
+}
+
+export function codeNotReceivedEmbed() {
+    return new EmbedBuilder()
+        .setTitle("Hmmm... That's strange")
+        .setDescription("**Make sure you are on the minecraft server.**\n"+
+            "**Make sure that the username you entered is correct.**\n"+
+            "**Code should be inside the in-game chat.**\n\n"+
+            "**Try to request the code again, but if it still fails to deliver you the code, contact the administration.**"
+        )
+        .setColor(Colors.DarkOrange)
 }

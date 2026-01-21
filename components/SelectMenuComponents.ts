@@ -2,7 +2,7 @@ import { ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilde
 
 export function linkSelectMenu() {
     const menu = new StringSelectMenuBuilder()
-        .setCustomId('link_options')
+        .setCustomId('linkOptions')
         .setPlaceholder('Select option')
         .addOptions(
             new StringSelectMenuOptionBuilder()
@@ -21,7 +21,40 @@ export function linkSelectMenu() {
             .setLabel('Link removal')
             .setDescription('Remove linked minecraft account form your discord.')
             .setValue('link_removal')
-            .setEmoji('🗑️')
+            .setEmoji('🗑️'),
+
+            new StringSelectMenuOptionBuilder()
+            .setLabel('Deselect')
+            .setDescription('Deselect previously selected option.')
+            .setValue('deselect')
+            .setEmoji('🔄')
+    );
+
+    return new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(menu);
+}
+
+export function codeReceiveSelectMenu() {
+    const menu = new StringSelectMenuBuilder()
+        .setCustomId('codeReceiveOptions')
+        .setPlaceholder('Select option')
+        .addOptions(
+            new StringSelectMenuOptionBuilder()
+            .setLabel('I got the code')
+            .setDescription('Press if you got the code.')
+            .setValue('code_received')
+            .setEmoji('✅'),
+
+            new StringSelectMenuOptionBuilder()
+            .setLabel('I didn\'t get the code')
+            .setDescription('Check in-game chat again. If it\'s not there, press this.')
+            .setValue('code_not_received')
+            .setEmoji('❌'),
+
+            new StringSelectMenuOptionBuilder()
+            .setLabel('Deselect')
+            .setDescription('Deselect previously selected option.')
+            .setValue('deselect')
+            .setEmoji('🔄')
     );
 
     return new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(menu);

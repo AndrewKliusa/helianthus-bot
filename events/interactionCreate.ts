@@ -6,7 +6,7 @@ export default class IntreactionCreateEvent extends Event<Events.InteractionCrea
     name = Events.InteractionCreate as const;
     async execute(interaction: Interaction) {
         if (!interaction.isChatInputCommand()) {
-            if (interaction.type == InteractionType.MessageComponent) {
+            if (interaction.type == InteractionType.MessageComponent || interaction.type == InteractionType.ModalSubmit) {
                 const interactionHandle = interaction.client.dynamicInteractions.get(interaction.customId)
                     ?? interaction.client.staticInteractions.get(interaction.customId);
                 if (interactionHandle) await interactionHandle(interaction);

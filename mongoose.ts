@@ -23,6 +23,10 @@ export default class Database {
             return userData;
         }
 
+        static async getByFieldValue<K extends keyof UserType>(fieldName: K, fieldValue: UserType[K]) {
+            return await UserModel.findOne({ [fieldName]: fieldValue });
+        }
+
         static async set(id: string, fields: Partial<UserType>) {
             const userData = await this.get(id);
             Object.assign(userData, fields);

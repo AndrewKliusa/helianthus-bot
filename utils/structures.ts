@@ -8,7 +8,7 @@ export abstract class Command {
 export type CommandConstructor = new () => Command;
 
 export type CommandWithPossibleInteractions = CommandConstructor & {
-    interactions?: Record<string, Function>;
+    staticInteractions?: Record<string, Function>;
 }
 
 

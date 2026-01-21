@@ -13,7 +13,8 @@ class ExtendedClient extends Client implements ExtendedClientType {
 	cooldowns = {
 		coinsForMessages: new Collection<string, number>,
 		coinsForVoice: new Collection<string, number>
-	}
+	};
+	activeMinecraftCodes = new Collection<string, { username: string, code: number }>;
 }
 
 const client = new ExtendedClient({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildVoiceStates] });
@@ -28,8 +29,8 @@ async function main() {
 		const CommandClass = imported.default as CommandWithPossibleInteractions;
 		const command = new CommandClass();
 
-		if (CommandClass.interactions) {
-			for (const [id, handler] of Object.entries(CommandClass.interactions)) {
+		if (CommandClass.staticInteractions) {
+			for (const [id, handler] of Object.entries(CommandClass.staticInteractions)) {
 				client.staticInteractions.set(id, handler);
 			}
 		}

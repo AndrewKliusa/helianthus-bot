@@ -6,7 +6,8 @@ export interface ExtendedClientType {
 	dynamicInteractions: Collection<string, Function>;
 	staticInteractions: Collection<string, Function>;
 	cooldowns: {
-	coinsForMessages: Collection<string, number>;
+		coinsForMessages: Collection<string, number>;
 		coinsForVoice: Collection<string, number>;
-	}
+	},
+	activeMinecraftCodes: Collection<string, { username: string, code: number }>
 }
