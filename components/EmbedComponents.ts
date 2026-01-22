@@ -98,7 +98,6 @@ export function linkEmbed(): MessageCreateOptions {
         ])
         .setColor(Colors.Orange)
         .setImage("https://media.discordapp.net/attachments/1451299094067941499/1463513728946274326/Helianthus-AccountLink.png?ex=69721adf&is=6970c95f&hm=190e9a03868862be38dfbd058e13fecca774c586f604ed1e1fac306dcac5b821&=&format=webp&quality=lossless&width=1800&height=400")
-        .setThumbnail("https://media.discordapp.net/attachments/1463472744111935617/1463473749713227849/solstice.png?ex=6971f5a3&is=6970a423&hm=77571d76aaa153a106d4bdb3020dc475374e4ed77bf283d19b62bd12fc004f53&=&format=webp&quality=lossless&width=800&height=800")
 
     return { embeds: [embed], components: [linkSelectMenu()] };
 }

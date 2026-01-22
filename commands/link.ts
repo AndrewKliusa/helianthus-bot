@@ -40,7 +40,7 @@ export default class LinkCommand extends Command {
         }
         
         if (selectedOption == "link_create" && userData.minecraftUsername) {
-            return await interaction.reply(errorEmbed(`You already have an account with username ${userData.minecraftUsername} linked to your discord account.`))
+            return await interaction.reply(errorEmbed(`You already have an account with username \`${userData.minecraftUsername}\` linked to your discord account.`))
         }
 
         if (selectedOption == "deselect") {
@@ -56,7 +56,7 @@ export default class LinkCommand extends Command {
             const username = userData.minecraftUsername;
             userData.minecraftUsername = null;
             await userData.save();
-            return await interaction.reply(successEmbed(`Link to minecraft account ${username} has been removed.`))
+            return await interaction.reply(successEmbed(`Link to minecraft account \`${username}\` has been removed.`))
         }
     }
 
@@ -69,16 +69,21 @@ export default class LinkCommand extends Command {
         const code = randomInt(100000, 1000000);
 
         const tellraw = [
-			{ text: "Your code for linking your Minecraft account: " },
-			{
-				text: "Hover over me",
-				color: "yellow",
-				hoverEvent: {
-				action: "show_text",
-				contents: code.toString()
-				}
-			}
-		];
+            { text: "Your linking code: ", color: "gold" },
+            {
+                text: "[ REVEAL CODE ]",
+                color: "aqua",
+                bold: true,
+                underlined: true,
+                hoverEvent: {
+                action: "show_text",
+                contents: [
+                    { text: "🔐 Your Code:\n", color: "yellow" },
+                    { text: code.toString(), color: "green", bold: true }
+                ]
+                }
+            }
+        ];
 
 		const cmd = `/tellraw ${minecraftUsername} ${JSON.stringify(tellraw)}`;
 
@@ -123,6 +128,25 @@ export default class LinkCommand extends Command {
             await userData.save();
 
             interaction.client.activeMinecraftCodes.delete(interaction.user.id);
+
+            const tellraw = [
+                { text: "✔ ", color: "green", bold: true },
+                { text: "Your account has been successfully linked!\n", color: "green" },
+                {
+                    text: `Linked to Discord: ${interaction.user.username}`,
+                    color: "aqua",
+                    hoverEvent: {
+                    action: "show_text",
+                    contents: [
+                        { text: "Discord Account\n", color: "gray" },
+                        { text: interaction.user.username, color: "gold", bold: true }
+                    ]
+                    }
+                }
+            ];
+
+            await RCON.sendMinecraftCommand(`/tellraw ${userLinkingData.username} ${JSON.stringify(tellraw)}`);
+
             return await interaction.reply(successEmbed(`Your discord account has been linked with \`${userLinkingData.username}\` in-game account.`))
         } else if (userLinkingData.code != Number(enteredCode)) {
             return await interaction.reply(errorEmbed("The code you entered was incorrect! Please, try again."))
