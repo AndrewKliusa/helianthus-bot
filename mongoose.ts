@@ -36,5 +36,14 @@ export default class Database {
         static async getAll() {
             return await UserModel.find();
         }
+
+        static bulkIncrementByField<K extends keyof UserType>(id: string, fieldName: K, fieldValue: UserType[K]) {
+            return {
+                updateOne: {
+                    filter: { id: id },
+                    update: { $inc: { [fieldName]: fieldValue } }
+                }
+            };
+        }
     }
 }

@@ -5,6 +5,7 @@ import { readdirSync } from 'fs';
 import { connectDatabase } from './mongoose';
 import { ExtendedClientType } from './types/ExtendedClient';
 import { Command, CommandWithPossibleInteractions, EventConstructor } from './utils/structures';
+import { startOnlineRewardsCron } from './extras/onlineRewardCron';
 
 class ExtendedClient extends Client implements ExtendedClientType {
 	commands = new Collection<string, Command>(); 
@@ -12,7 +13,8 @@ class ExtendedClient extends Client implements ExtendedClientType {
 	staticInteractions = new Collection<string, Function>();
 	cooldowns = {
 		coinsForMessages: new Collection<string, number>,
-		coinsForVoice: new Collection<string, number>
+		coinsForVoice: new Collection<string, number>,
+		coinsForIngameActivity: new Collection<string, number>
 	};
 	activeMinecraftCodes = new Collection<string, { username: string, code: number }>;
 }
@@ -55,6 +57,7 @@ async function main() {
 
 	await connectDatabase();
 	await client.login(token);
+	await startOnlineRewardsCron(client);
 }
 
 main();

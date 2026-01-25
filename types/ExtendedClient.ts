@@ -8,6 +8,7 @@ export interface ExtendedClientType {
 	cooldowns: {
 		coinsForMessages: Collection<string, number>;
 		coinsForVoice: Collection<string, number>;
+		coinsForIngameActivity: Collection<string, number>;
 	},
-	activeMinecraftCodes: Collection<string, { username: string, code: number }>
+	activeMinecraftCodes: Collection<string, { username: string, code: number }>;
 }
