@@ -1,49 +1,92 @@
 import mongoose from 'mongoose';
-import { UserModel } from './schemas/userSchema';
 import { mongoUri } from './json/config.json'
 import { UserType } from './types/UserType';
+import { UserModel } from './schemas/userSchema';
+import { ShopItemType } from './types/ShopItemType';
+import { ShopItemModel } from './schemas/shopItemSchema';
 
 export async function connectDatabase() {
     await mongoose.connect(mongoUri);
 }
 
-export default class Database {
-    static Users = class {
-        static async create(id: string) {
-            return await UserModel.create({
-                id: id
-            })
-        }
-
-        static async get(id: string) {
-            const userData = await UserModel.findOne({ id: id });
-            if (!userData) {
-                return await this.create(id);
-            }
-            return userData;
-        }
-
-        static async getByFieldValue<K extends keyof UserType>(fieldName: K, fieldValue: UserType[K]) {
-            return await UserModel.findOne({ [fieldName]: fieldValue });
-        }
-
-        static async set(id: string, fields: Partial<UserType>) {
-            const userData = await this.get(id);
-            Object.assign(userData, fields);
-            await userData.save();
-        }
-
-        static async getAll() {
-            return await UserModel.find();
-        }
-
-        static bulkIncrementByField<K extends keyof UserType>(id: string, fieldName: K, fieldValue: UserType[K]) {
-            return {
-                updateOne: {
-                    filter: { id: id },
-                    update: { $inc: { [fieldName]: fieldValue } }
-                }
-            };
-        }
+class Collection<T> {
+    protected model;
+    
+    constructor (model: mongoose.Model<T>) {
+        this.model = model;
     }
+
+    async getByFieldValue<K extends keyof T>(fieldName: K, fieldValue: T[K]) {
+        return this.model.findOne({[fieldName]: fieldValue});
+    }
+
+    bulkIncrementByField<K extends keyof T>(id: string, fieldName: K, fieldValue: T[K]) {
+        return {
+            updateOne: {
+                filter: { id: id },
+                update: { $inc: { [fieldName]: fieldValue } }
+            }
+        };
+    }
+
+    async getAll() {
+        return await this.model.find();
+    }
+}
+
+class Users extends Collection<UserType> {
+    constructor() {
+        super(UserModel);
+    }
+
+    async create(id: string) {
+        return await this.model.create({
+            id: id
+        })
+    }
+
+    async get(id: string) {
+        const userData = await this.model.findOne({ id: id });
+        if (!userData) {
+            return await this.create(id);
+        }
+        return userData;
+    }
+
+    async set(id: string, fields: Partial<UserType>) {
+        const userData = await this.get(id);
+        Object.assign(userData, fields);
+        await userData.save();
+    }
+}
+
+class ShopItems extends Collection<ShopItemType> {
+    constructor() {
+        super(ShopItemModel);
+    }
+
+    async create(name: string) {
+        return await this.model.create({
+            name: name
+        })
+    }
+
+    async get(name: string) {
+        const itemData = await this.model.findOne({ name: name });
+        if (!itemData) {
+            return await this.create(name);
+        }
+        return itemData;
+    }
+
+    async set(name: string, fields: Partial<ShopItemType>) {
+        const itemData = await this.get(name);
+        Object.assign(itemData, fields);
+        await itemData.save();
+    }
+}
+
+export default class Database {
+    static Users = new Users();
+    static ShopItems = new ShopItems();
 }
