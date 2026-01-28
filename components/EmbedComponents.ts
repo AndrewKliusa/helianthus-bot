@@ -3,6 +3,7 @@ import { adamantRoleId, demeterRoleId, theurgyRoleId } from "../json/config.json
 import { HouseType } from "../types/HouseType";
 import { UserType } from "../types/UserType";
 import { linkSelectMenu } from "./SelectMenuComponents";
+import { ShopItemType } from "../types/ShopItemType";
 
 export function errorEmbed(err: string) {
     return { embeds: [new EmbedBuilder()
@@ -126,4 +127,9 @@ export function codeNotReceivedEmbed() {
             "**Try to request the code again, but if it still fails to deliver you the code, contact the administration.**"
         )
         .setColor(Colors.DarkOrange)
+}
+
+export function ingameShopEmbed(itemsData: ShopItemType[]) {
+
+    return embed;
 }

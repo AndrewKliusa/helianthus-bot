@@ -16,6 +16,10 @@ class Collection<T> {
         this.model = model;
     }
 
+    async create(fields: Partial<T>) {
+        return await this.model.create(fields);
+    }
+
     async getByFieldValue<K extends keyof T>(fieldName: K, fieldValue: T[K]) {
         return this.model.findOne({[fieldName]: fieldValue});
     }
@@ -29,7 +33,7 @@ class Collection<T> {
         };
     }
 
-    async getAll() {
+    async getAll(): Promise<T[]> {
         return await this.model.find();
     }
 }
@@ -39,16 +43,10 @@ class Users extends Collection<UserType> {
         super(UserModel);
     }
 
-    async create(id: string) {
-        return await this.model.create({
-            id: id
-        })
-    }
-
     async get(id: string) {
         const userData = await this.model.findOne({ id: id });
         if (!userData) {
-            return await this.create(id);
+            return await this.create({ id: id});
         }
         return userData;
     }
@@ -65,16 +63,10 @@ class ShopItems extends Collection<ShopItemType> {
         super(ShopItemModel);
     }
 
-    async create(name: string) {
-        return await this.model.create({
-            name: name
-        })
-    }
-
     async get(name: string) {
         const itemData = await this.model.findOne({ name: name });
         if (!itemData) {
-            return await this.create(name);
+            return await this.create({ name: name });
         }
         return itemData;
     }

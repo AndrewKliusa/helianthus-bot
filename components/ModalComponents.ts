@@ -1,4 +1,5 @@
-import { ModalBuilder, TextInputBuilder, TextInputStyle, LabelBuilder } from "discord.js";
+import { LabelBuilder, ModalBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
+import { HouseType } from "../types/HouseType";
 
 export function minecraftUsernameInputModal() {
     const modal = new ModalBuilder()
@@ -36,6 +37,61 @@ export function codeInputModal() {
         .setTextInputComponent(codeInput);
 
     modal.addLabelComponents(codeInputLabel);
+    
+    return modal;
+}
+
+export function ingameShopAddModal() {
+    const modal = new ModalBuilder()
+        .setCustomId("ingameShopAddModal")
+        .setTitle("In-game shop item add");
+
+    const nameInput = new TextInputBuilder()
+        .setCustomId("nameInput")
+        .setStyle(TextInputStyle.Short)
+        .setRequired(true);
+
+    const descriptionInput = new TextInputBuilder()
+        .setCustomId("descriptionInput")
+        .setStyle(TextInputStyle.Paragraph)
+        .setRequired(true);
+
+    const commandInput = new TextInputBuilder()
+        .setCustomId("commandInput")
+        .setStyle(TextInputStyle.Paragraph)
+        .setRequired(true);
+
+    const nameInputLabel = new LabelBuilder()
+        .setLabel("Item name: ")
+        .setTextInputComponent(nameInput);
+
+    const descriptionInputLabel = new LabelBuilder()
+        .setLabel("Item description: ")
+        .setTextInputComponent(descriptionInput);
+
+    const commandInputLabel = new LabelBuilder()
+        .setLabel("Give command: ")
+        .setDescription("MAKE SURE TO INCLUDE {username} VARIABLE!!!! Like this: /give {username} minecraft:diamond 1")
+        .setTextInputComponent(commandInput);
+
+    const houseSelectOptions = Object.values(HouseType).map((houseType) =>{
+        return new StringSelectMenuOptionBuilder()
+            .setLabel(houseType)
+            .setValue(houseType)
+    })
+
+    const houseSelect = new StringSelectMenuBuilder()
+        .setCustomId('houseSelectInput')
+        .setPlaceholder('Pick a house')
+        .setRequired(true)
+        .addOptions(houseSelectOptions);
+
+    const houseSelectMenuLabel = new LabelBuilder()
+        .setLabel("Select a house the item is for")
+        .setDescription("Set to None to make it available for every house")
+        .setStringSelectMenuComponent(houseSelect)
+
+    modal.addLabelComponents(nameInputLabel, descriptionInputLabel, commandInputLabel, houseSelectMenuLabel);
     
     return modal;
 }

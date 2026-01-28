@@ -1,30 +1,26 @@
-import { REST, Routes, RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord.js';
-import { clientId, guildId, token } from './json/config.json';
+import { REST, RESTPostAPIChatInputApplicationCommandsJSONBody, Routes } from 'discord.js';
 import fs from 'node:fs';
 import path from 'node:path';
+import { clientId, guildId, token } from './json/config.json';
+import { CommandWithPossibleInteractions } from './utils/structures';
 
-const commands: RESTPostAPIChatInputApplicationCommandsJSONBody[] = [];
+async function refreshCommands() {
+    const commands: RESTPostAPIChatInputApplicationCommandsJSONBody[] = [];
 
-const commandsFolderPath = path.join(__dirname, 'commands');
-const commandsFolder = fs.readdirSync(commandsFolderPath);
+    const commandsFolderPath = path.join(__dirname, 'commands');
+    const commandsFolder = fs.readdirSync(commandsFolderPath);
 
-for (const file of commandsFolder ) {
-    const filePath = path.join(commandsFolderPath , file);
+    for (const file of commandsFolder ) {
+        const filePath = path.join(commandsFolderPath, file);
+        const imported = await import(filePath);
+        const CommandClass = imported.default as CommandWithPossibleInteractions;
+        const command = new CommandClass();
 
-    const command = require(filePath);
-
-    if ('data' in command && 'execute' in command) {
         commands.push(command.data.toJSON());
-    } else {
-        console.warn(
-            `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`
-        );
     }
-}
 
-const rest = new REST().setToken(token);
+    const rest = new REST().setToken(token);
 
-(async () => {
     try {
         console.log(`Started refreshing ${commands.length} application commands.`);
 
@@ -37,4 +33,6 @@ const rest = new REST().setToken(token);
     } catch (error) {
         console.error(error);
     }
-})();
+}
+
+refreshCommands();
